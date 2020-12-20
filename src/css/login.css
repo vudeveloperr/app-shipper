@@ -1,0 +1,39 @@
+/*cài đặt các cột start*/
+
+.col-center-block { 
+    float: none;    
+    display: block; 
+    margin-left: auto;  
+    margin-right: auto;
+}
+.col-md-3 {
+    text-align: center;
+    margin: auto;
+    top: 180px;
+}
+/*cài đặt các cột end*/   
+/*cài đặt text start*/
+.text {
+    color:black;
+    padding: 0 15px;
+    font-size: 30px;
+    font-family: 'Roboto-Condensed-Bold';
+    text-transform: uppercase;
+}
+/*cài đặt text start*/
+/* .bg {
+    background-image: url(/img/slide.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 800px;
+    background-position: center;
+} */
+/**/
+.checkbox label {
+    color: black;
+    font-family: 'Roboto-Condensed-Bold';
+}
+
+.login-form {
+    margin-top: 20px;
+}

@@ -1,0 +1,34 @@
+
+.header_logo a {
+    display: inline-block;
+    width: 30%;
+}
+
+#label-order{
+    margin-left: 520px ;
+    font-family: Garamond, Courier;
+}
+
+#btn-nhan{
+    margin-left: 920px ;
+}
+
+.form-order{
+    border-radius: 10px;
+    border-style: outset;
+    padding-left: 15px;
+}
+
+.header-container{
+    /* position: sticky; */
+    top:0px;
+    background-color: #ffffff;
+}
+
+/* .home-container{
+    margin-top: 100px;
+} */
+
+.nav-item{
+    padding-top: 20px;
+}
