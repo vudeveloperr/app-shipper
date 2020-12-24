@@ -13,8 +13,6 @@ import ListReciveOrder from "./containers/Order/ListReciveOder"
 
 ReactDOM.render(
   <Router>
-    
-
     <Route path="/" exact component={Home}/>
     <Route path="/login" exact component={Login} />
     <Route path="/reciveroder" exact component={ListReciveOrder} />

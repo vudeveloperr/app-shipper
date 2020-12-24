@@ -1,32 +1,61 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 // import Order from './Order'
-import 'antd/dist/antd.css'
-import { List, Avatar } from 'antd'
+import 'antd/dist/antd.css';
+import { List, Avatar } from 'antd';
+import {withRouter} from 'react-router-dom';
+import {STAT_URL} from '../../consts'
 
+import axios from 'axios';
 
-const listData = [];
-for (let i = 0; i < 23; i++) {
-    listData.push({
-        href: 'https://ant.design',
-        title: `Mã đơn : 13457982452${i}`,
-        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        nameproduct: 'Bún chả, bun gan',
-        money: '12345654',
-        stateorder: 'chua giao',
-        timedelivery: '123456789765',
-        fromlocation: 'so 873, duong hoang quoc viet, co nhue ,bac tu liem , ha noi',
-        tolocation: 'g234qgfqwef2   3',
-    });
-}
+class ListOrder extends Component {
+    constructor(props){
+        super(props);
+        this.state = { data: []}
+    }
 
-// const IconText = ({ icon, text }) => (
-//     <Space>
-//         {React.createElement(icon)}
-//         {text}
-//     </Space>
-// );
+    componentDidMount(){
+        let config = {headers:{Auth:  window.localStorage.getItem('token')}}
+        axios.get(`${STAT_URL}/v1/listorder`,config)
+        .then((response) => {
+            if (response.data.error.code === 200){
+                this.setState({ data: response.data.data }, () => console.log(this.state.data))
+            }
+            else{
+                this.props.history.push("/login")
+            } 
+        })
+        .catch(() => this.props.history.push("/login"))
+    }
 
-export default class ListOrder extends Component {
+    receiveOrder(order_id){
+        let config = {headers:{Auth: window.localStorage.getItem('token')}}
+        axios.post(`${STAT_URL}/v1/listorder/?orderid=${order_id}`,{},config)
+        .then((response) => {
+            if (response.data.error.code === 200){
+                if(response.data.data === true){
+                    alert("Nhận đơn hàng thành công");
+                }
+                else{
+                    alert("Nhận đơn hàng thất bại");
+                }
+                axios.get(`${STAT_URL}/v1/listorder`,config)
+                .then((response) => {
+                    if (response.data.error.code === 200){
+                        this.setState({ data: response.data.data }, () => console.log(this.state.data))
+                    }
+                    else{
+                        this.props.history.push("/login")
+                    } 
+                })
+                .catch(console.log)
+            }
+            else{
+                this.props.history.push("/login")
+            } 
+        })
+        .catch(console.log)
+    }
+
     render() {
         return (
             <div className="container">
@@ -39,39 +68,29 @@ export default class ListOrder extends Component {
                         },
                         pageSize: 6,
                     }}
-                    dataSource={listData}
+                    dataSource={this.state.data}
 
                     renderItem={item => (
                         <List.Item key={item.title} >
                             <List.Item.Meta
-                                avatar={<Avatar src={item.avatar} />}
-                                title={<a href={item.href}>{item.title}</a>}
+                                title={<a>Mã đơn:{item.id}</a>}
                             />
-                            <div>
-                                {item.nameproduct}
+                            <div> Danh sách hàng:
+                                {
+                                (item.list_food || []).map((i) => 
+                                    (<span>{i.name},</span>)
+                                )}
                             </div>
                             <div className="total-bill">
                                 <span>Tiền ứng hàng : </span>
-                                <span>{item.money}</span>
-                            </div>
-                            <div className="state-delivery">
-                                <span>Trạng thái: </span>
-                                <span>{item.stateorder}</span>
-                            </div>
-                            <div className="time-delivery">
-                                <span>Giờ giao hàng: </span>
-                                <span>{item.timedelivery}</span>
-                            </div>
-                            <div className="fromlocation">
-                                <span>Điểm đi: </span>
-                                <span>{item.fromlocation}</span>
+                                <span>{item.total_amount}đ</span>
                             </div>
                             <div className="tolocation">
                                 <span>Điểm đến: </span>
-                                <span>{item.tolocation}</span>
+                                <span>{item.address}</span>
                             </div>
                             <div id="btn-nhan">
-                                <button className="btn btn-danger" style={{ border: 'none' }}>Nhận Đơn</button>
+                                <button className="btn btn-danger" onClick={() => this.receiveOrder(item.id)} style={{ border: 'none' }}>Nhận Đơn</button>
                             </div>
                         </List.Item>
                     )}
@@ -80,3 +99,6 @@ export default class ListOrder extends Component {
         )
     }
 }
+
+
+export default withRouter(ListOrder);

@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react'
 import ListOrder from "../Order/ListOrder"
-import Header from "/Users/nguyenvanvu/Documents/GitHub/app-shipper/src/components/HeaderComponent/Header"
+import Header from "../../components/HeaderComponent/Header"
 
 
 export default class Home extends Component {

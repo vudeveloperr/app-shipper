@@ -2,7 +2,9 @@ import React from 'react'
 import axios from 'axios';
 import styled from 'styled-components';
 import { Form, Input, Button } from 'antd';
-import { BASE_URL } from '../../consts';
+import { STAT_URL } from '../../consts';
+
+import {withRouter} from 'react-router-dom';
 
 const Background = styled.div`
     background-image: url('/img/6.jpg');
@@ -15,18 +17,18 @@ const Background = styled.div`
 
 
 class Login extends React.Component {
-    // constructor(props) {
-    //     super(props);
-    // }
-
     login(values) {
         console.log(values)
-        axios.post(`${BASE_URL}/api/v1/shipper/login`, values)
+        axios.post(`${STAT_URL}/v1/login`, values)
             .then(
                 (respone) => {
-                    window.localStorage.setItem('token',`${respone.data.tokenType} ${respone.data.accessToken}`)
-                    window.dispatch({type: 'LOGGED', data: true});
+                    if(respone.data.error.code === 200){
+                    window.localStorage.setItem('token',`${respone.data.data}`)
                     this.props.history.push("/");
+                    }
+                    else{
+                    alert("Đăng nhập thất bại");
+                    }
                 }
             )
             .catch(console.log)
@@ -66,4 +68,4 @@ class Login extends React.Component {
     }
 }
 
-export default Login
+export default withRouter(Login);
